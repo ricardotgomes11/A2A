@@ -1,0 +1,22 @@
+[
+  {"rank": 1, "framework": "Qiskit", "developer": "IBM", "language": "Python", "license": "Apache 2.0", "status": "v1.0+ (2024)"},
+  {"rank": 2, "framework": "Cirq", "developer": "Google", "language": "Python", "license": "Apache 2.0", "status": "v1.3+ (2024)"},
+  {"rank": 3, "framework": "PennyLane", "developer": "Xanadu", "language": "Python", "license": "Apache 2.0", "status": "v0.34+ (2024)"},
+  {"rank": 4, "framework": "Forest SDK/PyQuil", "developer": "Rigetti", "language": "Python", "license": "Apache 2.0", "status": "v4.x (2024)"},
+  {"rank": 5, "framework": "ProjectQ", "developer": "ETH Zurich", "language": "Python/C++", "license": "Apache 2.0", "status": "v0.8.0 (Oct 2022)"},
+  {"rank": 6, "framework": "Strawberry Fields", "developer": "Xanadu", "language": "Python", "license": "Apache 2.0", "status": "v0.23+ (2024)"},
+  {"rank": 7, "framework": "TensorFlow Quantum", "developer": "Google", "language": "Python", "license": "Apache 2.0", "status": "v0.7+ (2024)"},
+  {"rank": 8, "framework": "Ocean SDK", "developer": "D-Wave", "language": "Python", "license": "Apache 2.0", "status": "v5.x (2024)"},
+  {"rank": 9, "framework": "Q# / QDK", "developer": "Microsoft", "language": "Q# Language", "license": "MIT", "status": "v0.27+ (2024)"},
+  {"rank": 10, "framework": "Quantum Inspire", "developer": "QuTech", "language": "Python/OpenQASM", "license": "Proprietary", "status": "Active (2024)"},
+  {"rank": 11, "framework": "XACC", "developer": "ORNL/Oak Ridge", "language": "Python/C++", "license": "BSD 3-Clause", "status": "v0.1.0+ (2024)"},
+  {"rank": 12, "framework": "Qulacs", "developer": "QunaSys", "language": "Python/C++", "license": "MIT", "status": "v0.3.0+ (2023)"},
+  {"rank": 13, "framework": "Qibo", "developer": "Qilimanjaro", "language": "Python", "license": "AGPL 3.0", "status": "v0.2+ (2024)"},
+  {"rank": 14, "framework": "QuEST", "developer": "University of Oxford", "language": "C/C++", "license": "MIT", "status": "v3.5+ (2023)"},
+  {"rank": 15, "framework": "Quantum++", "developer": "Vlad Gheorghiu", "language": "C++11", "license": "MIT", "status": "v3.0+ (2023)"},
+  {"rank": 16, "framework": "Quipper", "developer": "University of Waterloo", "language": "Haskell", "license": "BSD 3-Clause", "status": "v0.9 (Research)"},
+  {"rank": 17, "framework": "OpenFermion", "developer": "Google", "language": "Python", "license": "Apache 2.0", "status": "v1.5+ (2024)"},
+  {"rank": 18, "framework": "Qniverse", "developer": "C-DAC Bangalore", "language": "Python", "license": "Open Source", "status": "v1.0+ (2024)"},
+  {"rank": 19, "framework": "PyTket", "developer": "Cambridge Quantum", "language": "Python", "license": "Apache 2.0", "status": "v1.16+ (2024)"},
+  {"rank": 20, "framework": "CUDA-Q", "developer": "NVIDIA", "language": "C++/Python", "license": "Apache 2.0", "status": "v0.5+ (2024)"}
+]

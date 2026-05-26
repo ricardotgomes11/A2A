@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereign Stealth Clearing Bridge System Interface</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glass-container">
+        <header>
+            <div class="logo">SOVEREIGN STEALTH // CHASE-WEB3 CLEARED v1.0.0</div>
+            <div id="connection-status" class="status-indicator alert">DISCONNECTED</div>
+        </header>
+
+        <main class="grid-layout">
+            <section class="panel registers">
+                <h3>System Registers</h3>
+                <div class="stats-grid" id="register-container">
+                    </div>
+            </section>
+
+            <section class="panel visualizer">
+                <h3>Web3-to-Chase Sovereign Clearing Bridge Matrix</h3>
+                <canvas id="networkCanvas"></canvas>
+            </section>
+
+            <section class="panel terminal">
+                <h3>Core Interpreter</h3>
+                <div class="terminal-output" id="term-out"></div>
+                <div class="terminal-input-container">
+                    <span>&gt;</span>
+                    <input type="text" id="term-in" placeholder="Enter target operational command..." autofocus>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
