@@ -87,15 +87,29 @@ const flowPaths = [
     { from: "COINBASE", to: "JPMORGAN CHASE" }
 ];
 
-function triggerSweepParticles() {
-    flowPaths.forEach(path => {
-        particles.push({
-            path: path,
-            t: 0,
-            speed: 0.01 + Math.random() * 0.015,
-            size: 2 + Math.random() * 3
+function triggerSweepParticles(route = null) {
+    if (route) {
+        const nodes = route.split('->').map(s => s.trim());
+        for (let i = 0; i < nodes.length - 1; i++) {
+            const from = nodes[i];
+            const to = nodes[i+1];
+            particles.push({
+                path: { from, to },
+                t: 0,
+                speed: 0.008 + Math.random() * 0.006,
+                size: 3 + Math.random() * 2
+            });
+        }
+    } else {
+        flowPaths.forEach(path => {
+            particles.push({
+                path: path,
+                t: 0,
+                speed: 0.01 + Math.random() * 0.015,
+                size: 2 + Math.random() * 3
+            });
         });
-    });
+    }
 }
 
 // Canvas Execution Loop
@@ -145,7 +159,13 @@ function drawNetwork() {
 
     // Update and draw path flow particles
     particles.forEach((p, idx) => {
-        p.t += p.speed;
+        let speedMultiplier = 1.0;
+        if (telemetryData) {
+            const loss = telemetryData.registers.VICREG_LOSS || 0.0;
+            const coherence = telemetryData.system_coherence_index || 100.0;
+            speedMultiplier = (coherence / 100.0) * (1.0 / (1.0 + loss * 0.05));
+        }
+        p.t += p.speed * speedMultiplier;
         if (p.t >= 1) {
             particles.splice(idx, 1);
             return;
@@ -263,7 +283,7 @@ function drawNetwork() {
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.roundRect(15, 15, 300, 95, 8);
+        ctx.roundRect(15, 15, 300, 112, 8);
         ctx.fill();
         ctx.stroke();
 
@@ -277,6 +297,8 @@ function drawNetwork() {
         ctx.fillText(`CLIENT ID: ${telemetryData.client_id}`, 25, 69);
         ctx.fillStyle = '#10b981';
         ctx.fillText(`AUDIT STATUS: ${telemetryData.audit_status.toUpperCase()}`, 25, 86);
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillText(`COHERENCE INDEX: ${telemetryData.system_coherence_index || 0}%`, 25, 103);
     }
     
     requestAnimationFrame(drawNetwork);
@@ -326,8 +348,13 @@ termIn.addEventListener('keydown', async (e) => {
             const data = await response.json();
             if (data.result) {
                 appendTerminal(data.result.payload, 'success');
-                // Trigger sweep visualization on success
-                triggerSweepParticles();
+                // Parse route string if present to trigger path-specific particles
+                const routeMatch = data.result.payload.match(/Route:\s+([A-Za-z0-9_ ]+(?:\s*->\s*[A-Za-z0-9_ ]+)+)/);
+                if (routeMatch) {
+                    triggerSweepParticles(routeMatch[1]);
+                } else {
+                    triggerSweepParticles();
+                }
             } else {
                 appendTerminal(data.error.message, 'error');
             }

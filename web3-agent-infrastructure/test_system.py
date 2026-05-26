@@ -11,8 +11,10 @@ def test_system_pipeline():
     assert kernel.client_id == "edf3b1f0-f1fc-4a2d-a6a4-513624bc8854"
     assert kernel.audit_status == "dormant"
     
-    # Verify live geospatial calculations (pre-calculations)
+    # Verify live geospatial calculations (pre-calculations) and coherence index
     state = kernel.get_state()
+    assert "system_coherence_index" in state
+    assert state["system_coherence_index"] > 0.0
     for node in state["nodes"]:
         assert "distance_km" in node
         assert "latency_ms" in node
@@ -48,11 +50,25 @@ def test_system_pipeline():
     assert kernel.registers["VICREG_LOSS"] > 0.0
     print(f"[PASS] VICReg Regularization loss verified: {kernel.registers['VICREG_LOSS']:.4f}")
 
-    # 4. Assert SciPy Trajectory Optimization
+    # 4. Assert SciPy Trajectory Optimization with Dynamic Latency Feedback
     opt_report = kernel.execute_command("optimize-trajectory")
     assert "SCIPY ROUTING OPTIMIZATION" in opt_report
-    assert kernel.registers["OPTIMIZED_DELAY"] > 0.0
-    print(f"[PASS] SciPy Routing Optimization verified. Min Delay: {kernel.registers['OPTIMIZED_DELAY']:.4f} hours.")
+    initial_delay = kernel.registers["OPTIMIZED_DELAY"]
+    assert initial_delay > 0.0
+    
+    # Induce latency spike
+    kernel.execute_command("trigger-audit")
+    assert kernel.registers["SYSTEM_LATENCY"] == 0.77
+    
+    # Re-run optimization to confirm dynamic latency adjustments shift optimization outputs
+    opt_report_spike = kernel.execute_command("optimize-trajectory")
+    spike_delay = kernel.registers["OPTIMIZED_DELAY"]
+    assert spike_delay != initial_delay
+    
+    # Reset audit status back to normal
+    kernel.execute_command("resolve-audit")
+    assert kernel.registers["SYSTEM_LATENCY"] == 0.00
+    print(f"[PASS] SciPy Routing Optimization verified. Delay adjusted dynamically (Normal: {initial_delay:.4f}h, Spike: {spike_delay:.4f}h).")
 
     # 5. Cryptographic signature and verification checks
     res_unlock = kernel.execute_command("enable-secure-channel")

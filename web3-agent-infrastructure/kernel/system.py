@@ -132,6 +132,14 @@ class ClearingBridgeKernel:
                 # Network latency pre-calculation (speed of light in fiber optic + routing hop delays)
                 node["latency_ms"] = round(dist * 0.005 + 5.0, 2) if dist > 0.1 else 0.85
 
+    def calculate_coherence(self):
+        loss = self.registers.get("VICREG_LOSS", 0.0)
+        latencies = [n.get("latency_ms", 0.85) for n in self.nodes]
+        latency_variance = float(np.var(latencies)) if latencies else 0.0
+        sys_latency = self.registers.get("SYSTEM_LATENCY", 0.0)
+        coherence = 100.0 / (1.0 + loss + latency_variance + sys_latency)
+        return round(coherence, 2)
+
     def get_state(self):
         self.calculate_geospatial_metrics()
         return {
@@ -140,7 +148,8 @@ class ClearingBridgeKernel:
             "audit_status": self.audit_status,
             "operator": self.operator,
             "geospatial_anchor": self.geospatial_anchor,
-            "client_id": self.client_id
+            "client_id": self.client_id,
+            "system_coherence_index": self.calculate_coherence()
         }
 
     def execute_command(self, cmd: str) -> str:
@@ -175,9 +184,21 @@ class ClearingBridgeKernel:
             amount = float(np.random.randint(5000, 250000))
             manifest = self.settlement_engine.process_on_ramp_settlement(gateway, amount, "123456789012")
             self.transaction_history.append(manifest)
+            
+            # Determine path node names
+            path_nodes = ["METAMASK"]
+            if gateway == "COINBASE_PRIME":
+                path_nodes.extend(["COINBASE", "JPMORGAN CHASE"])
+            elif gateway == "BITPAY_PAYOUT":
+                path_nodes.extend(["BITCOIN", "BITPAY", "JPMORGAN CHASE"])
+            else: # ONYX_NETWORK
+                path_nodes.extend(["BINANCE", "JPMORGAN CHASE"])
+            route_str = " -> ".join(path_nodes)
+
             return (
                 f"Transfer execution sweep initiated. Transaction sweep executed. "
-                f"Gateway: {gateway}, Amount: ${amount:,.2f}, Protocol: {manifest.get('clearing_protocol')}, Status: {manifest.get('status')}."
+                f"Gateway: {gateway}, Amount: ${amount:,.2f}, Protocol: {manifest.get('clearing_protocol')}, Status: {manifest.get('status')}. "
+                f"Route: {route_str}"
             )
 
         elif base_cmd == "enable-secure-channel":
@@ -219,10 +240,21 @@ class ClearingBridgeKernel:
             amount = float(parts[2]) if len(parts) > 2 else 125000.00
             manifest = self.settlement_engine.process_on_ramp_settlement(gateway, amount, "123456789012")
             self.transaction_history.append(manifest)
+            
+            # Determine path node names
+            path_nodes = ["METAMASK"]
+            if gateway == "COINBASE_PRIME":
+                path_nodes.extend(["COINBASE", "JPMORGAN CHASE"])
+            elif gateway == "BITPAY_PAYOUT" or gateway == "BITPAY":
+                path_nodes.extend(["BITCOIN", "BITPAY", "JPMORGAN CHASE"])
+            else:
+                path_nodes.extend(["BINANCE", "JPMORGAN CHASE"])
+            route_str = " -> ".join(path_nodes)
+
             return (
                 f"[SETTLEMENT REPORT] Target Gateway: {gateway} | "
                 f"Amount: ${amount:,.2f} USD | Protocol: {manifest.get('clearing_protocol')} | "
-                f"Status: {manifest.get('status')}"
+                f"Status: {manifest.get('status')} | Route: {route_str}"
             )
 
         elif base_cmd == "fund":
@@ -357,7 +389,13 @@ class ClearingBridgeKernel:
         """
         # Objective: minimize weighted fee + delay
         # x = [x_ach, x_rtp, x_onyx] (fractions of volume summing to 1)
-        delays = np.array([24.0, 0.01, 0.001]) # hours
+        sys_latency = self.registers.get("SYSTEM_LATENCY", 0.0)
+        # Base delays scaled dynamically by SYSTEM_LATENCY
+        delays = np.array([
+            24.0 + sys_latency * 10.0, 
+            0.01 + sys_latency * 100.0, 
+            0.001 + sys_latency * 20.0
+        ])
         fees = np.array([1.50, 15.00, 0.50]) # USD per transaction equivalent weight
         
         # Minimize (w1 * delays + w2 * fees) . x
