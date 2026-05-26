@@ -6,7 +6,7 @@
     "operator": "Ricardo Gomes",
     "hardware_nodes": ["Samsung SM-F966U1", "iPhone 16+"],
     "geospatial_anchor": "New York City (Manhattan)",
-    "project_core": "quantumai-463916",
+    "project_core": "clearing-bridge-analytics-463916",
     "identity_payload_token_id": "edf3b1f0-f1fc-4a2d-a6a4-513624bc8854",
     "private_key_b64": "oisc2jtXvENDiSTbaoZ4pof3P16QHbcZel2080empJLd6rDzjFXFbgyrsezkk1hP+i0bQVSlY1SniZqN1XODYw=="
   },
@@ -55,18 +55,18 @@
   ],
   "google_backbone": {
     "bigquery": {
-      "project_id": "quantumai-463916",
-      "dataset_id": "planetary_twin",
+      "project_id": "clearing-bridge-analytics-463916",
+      "dataset_id": "transaction_analytics",
       "data_scale_pb": 90
     },
     "earth_engine": {
       "connection_state": "active",
       "historical_raster_sources": ["sentinel_2", "landsat_8", "sar_sentinel_1"]
     },
-    "vertex_ai_vision": {
+    "vertex_ai_analytics": {
       "status": "live",
-      "motion_streams": ["edge_router_node_nyc", "terrestrial_camera_lower_manhattan"],
-      "rf_wave_function_visualization": "enabled"
+      "data_streams": ["edge_router_node_nyc", "terrestrial_camera_lower_manhattan"],
+      "telemetry_visualization": "enabled"
     }
   }
 }

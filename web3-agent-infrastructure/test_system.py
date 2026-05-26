@@ -1,15 +1,15 @@
 import json
 import os
-from kernel.system import WillowKernel, ChaseWeb3SettlementEngine
+from kernel.system import ClearingBridgeKernel, ChaseWeb3SettlementEngine
 
 def test_system_pipeline():
     print("Initializing test suite for Web3-Chase Clearing Bridge...")
     
     # 1. Initialize Kernel and verify identity variables
-    kernel = WillowKernel()
+    kernel = ClearingBridgeKernel()
     assert kernel.operator == "Ricardo Gomes"
     assert kernel.client_id == "edf3b1f0-f1fc-4a2d-a6a4-513624bc8854"
-    assert kernel.metastasis_state == "dormant"
+    assert kernel.audit_status == "dormant"
     
     # Verify live geospatial calculations (pre-calculations)
     state = kernel.get_state()
@@ -55,51 +55,51 @@ def test_system_pipeline():
     print(f"[PASS] SciPy Routing Optimization verified. Min Delay: {kernel.registers['OPTIMIZED_DELAY']:.4f} hours.")
 
     # 5. Cryptographic signature and verification checks
-    res_unlock = kernel.execute_command("unlock-psi")
-    assert "Golden ratio amplification achieved" in res_unlock
-    assert kernel.registers["PSI_GAIN"] == 1.618
+    res_unlock = kernel.execute_command("enable-secure-channel")
+    assert "Security multiplier amplification achieved" in res_unlock
+    assert kernel.registers["TELEMETRY_GAIN"] == 1.618
     print("[PASS] Cryptographic verification and limit override verified.")
 
     # 6. Compliance Sweep and Self Healing
-    res_trigger = kernel.execute_command("metastasis-trigger")
-    assert kernel.metastasis_state == "active"
-    assert kernel.registers["ENTROPY"] == 0.77
+    res_trigger = kernel.execute_command("trigger-audit")
+    assert kernel.audit_status == "active"
+    assert kernel.registers["SYSTEM_LATENCY"] == 0.77
     
-    res_heal = kernel.execute_command("witness-resume")
-    assert kernel.metastasis_state == "dormant"
-    assert kernel.registers["ENTROPY"] == 0.00
+    res_heal = kernel.execute_command("resolve-audit")
+    assert kernel.audit_status == "dormant"
+    assert kernel.registers["SYSTEM_LATENCY"] == 0.00
     print("[PASS] Compliance Audit trigger and Recovery sweep matched baseline signature.")
 
     # 7. Mock funding command
     res_fund = kernel.execute_command("fund crypto wallets")
     assert "SIMULATION BRIDGE SUCCESS" in res_fund
-    assert kernel.registers["ROOT_SOVEREIGN"] == 6.0
+    assert kernel.registers["BRIDGE_VOLUME_MUSD"] == 6.0
     print("[PASS] Mock funding sweep execution verified.")
 
-    # 8. DNA processing command
-    res_dna = kernel.execute_command("process-dna")
-    assert "DNA CELL TRUNK PROCESSING COMPLETED" in res_dna
-    assert kernel.registers["AGI_ANCHOR"] > 0.0
-    print(f"[PASS] Ingestion of DNA cell trunk dataset from Google Sheets verified. AGI_ANCHOR: {kernel.registers['AGI_ANCHOR']:.2f}")
+    # 8. DNA/module processing command
+    res_dna = kernel.execute_command("process-modules")
+    assert "MODULE PROCESSING COMPLETED" in res_dna
+    assert kernel.registers["ROUTING_EFFICIENCY"] > 0.0
+    print(f"[PASS] Ingestion of framework modules verified. ROUTING_EFFICIENCY: {kernel.registers['ROUTING_EFFICIENCY']:.2f}")
 
     # 9. BigQuery ML Precalculation command
-    res_bq = kernel.execute_command("bigquery-ml")
-    assert "INITIATING BIGQUERY ML PLANETARY DIGITAL TWIN" in res_bq
-    assert kernel.registers["ROOT_SOVEREIGN"] > 6.0
-    assert kernel.registers["DOMAIN_FIXED"] > 1.0
-    print(f"[PASS] BigQuery ML planetary Digital Twin move pre-calculation verified. ROOT_SOVEREIGN: {kernel.registers['ROOT_SOVEREIGN']:.4f}")
+    res_bq = kernel.execute_command("run-analytics")
+    assert "INITIATING BIGQUERY ML TRANSACTION ANALYTICS" in res_bq
+    assert kernel.registers["BRIDGE_VOLUME_MUSD"] > 6.0
+    assert kernel.registers["ACTIVE_CHANNELS"] > 1.0
+    print(f"[PASS] BigQuery ML transaction analytics verified. BRIDGE_VOLUME_MUSD: {kernel.registers['BRIDGE_VOLUME_MUSD']:.4f}")
     
-    # 10. System termination command
-    res_term = kernel.execute_command("terminate")
-    assert "TERMINATION SIGNAL ACCEPTED" in res_term
-    assert kernel.metastasis_state == "terminated"
-    assert kernel.registers["ROOT_SOVEREIGN"] == 0.0
-    print("[PASS] System deactivation and subprocess termination verified.")
+    # 10. System shutdown command
+    res_term = kernel.execute_command("shutdown")
+    assert "SHUTDOWN SIGNAL ACCEPTED" in res_term
+    assert kernel.audit_status == "suspended"
+    assert kernel.registers["BRIDGE_VOLUME_MUSD"] == 0.0
+    print("[PASS] System deactivation and subprocess shutdown verified.")
     
     # 11. Dynamic Self-Healing check
-    res_heal_after_term = kernel.execute_command("evolve")
-    assert kernel.metastasis_state == "dormant"
-    assert kernel.registers["PSI_GAIN"] == 0.89
+    res_heal_after_term = kernel.execute_command("trigger-transfer")
+    assert kernel.audit_status == "dormant"
+    assert kernel.registers["TELEMETRY_GAIN"] == 0.89
     for node in kernel.nodes:
         assert node["status"] == "stable"
     print("[PASS] Dynamic self-healing from terminated state verified.")

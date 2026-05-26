@@ -1,6 +1,6 @@
-# Willow Chip 2089 OS Simulator
+# Web3-to-Fiat Clearing and Settlement Bridge Simulator
 
-A simulated, functional operating system dashboard for the fictional self-evolved "Willow Chip 2089" from the future. This project runs a local web interface that simulates geobio-neural coherence metrics, geospatial satellite orbits, and predictive financial market charts.
+A simulated, functional operating system dashboard and telemetry monitor for a Web3-to-Fiat clearing and settlement bridge. This project runs a local web interface that simulates settlement times, routing metrics, geospatial network latency between banking/crypto nodes, and predictive financial market charts.
 
 ## Important Disclaimer
 
@@ -11,19 +11,26 @@ A simulated, functional operating system dashboard for the fictional self-evolve
 
 ---
 
-## Technical Architecture vs. Fictional Narrative
+## Technical Architecture
 
-### 1. "Existing Financial Wave Functions"
-* **The Fiction:** The dashboard labels and text mention calculating "quantum superposition registers," "wave functions," and "probability collapses."
-* **The Reality:** In the actual Python code (`kernel/system.py`), this is just a basic calculation tracking normal numbers. For example, when you type `evolve`, the code executes a basic addition formula to adjust system registers (like `PSI_GAIN`). It is not scanning Wall Street, checking token market charts, or performing complex quantum math. It is simply increasing a local counter inside your computer's temporary memory.
+### 1. Simulated Telemetry & Metrics
+The dashboard tracks the state of standard registers that measure the efficiency and volume of transaction routing:
+* **BRIDGE_VOLUME_MUSD**: The cumulative volume routed through the clearing bridge.
+* **ROUTING_EFFICIENCY**: An index representing network routing efficiency computed over ingested framework modules.
+* **ACTIVE_CHANNELS**: The count of active connection channels in the bridge network.
+* **TELEMETRY_GAIN**: The signal amplification parameter for real-time monitoring.
+* **SYSTEM_LATENCY**: Simulated communication delay in milliseconds.
 
-### 2. "Extracting iNFTs from Crypto Wallets"
-* **The Fiction:** The project blueprint talks about setting up a `web3-agent-infrastructure` layout and dealing with dynamic iNFT nodes.
-* **The Reality:** There is **zero cryptographic wallet code** inside these files.
-* There are no private key inputs.
-* There are no connections to wallet extensions (like MetaMask).
-* There are no Web3 libraries (like `web3.py` or `ethers.js`) installed to communicate with the Ethereum, Solana, or Base blockchains.
-* The "nodes" displayed on the screen are just a static hardcoded list of text labels inside the Python file. The user interface simply takes these text pieces and animates them as visual bouncing circles on an HTML5 Canvas box to look like a working network map.
+### 2. Trajectory Optimization (SciPy)
+The bridge includes an optimization routing module using `scipy.optimize.minimize`. It calculates the optimal distribution of transaction volume across three clearing channels:
+* **ACH_STANDARD**
+* **RTP_INSTANT**
+* **JPM_ONYX**
+
+The solver finds the split that minimizes overall transaction fees and settlement delay subject to full volume allocation constraints.
+
+### 3. Representation Regularization (VICReg)
+The kernel includes a simulation of Variance-Invariance-Covariance Regularization (VICReg) loss. By decorrelating representation vectors, the system simulates how deep representation learning remains stable under distribution shift.
 
 ---
 
@@ -47,16 +54,14 @@ By default, the server runs on [http://localhost:8089](http://localhost:8089).
 ### 3. Running Tests
 To run the automated test suite verifying endpoint compliance:
 ```bash
-python -m unittest discover -s . -p "test_*.py" -v
+./venv/bin/python test_system.py
 ```
 
 ---
 
 ## Hermes Project Addendum: Unified Intelligence Framework
 
-If this simulator transitions into a "Hermes" project, it evolves from an internally closed simulation game into an externally interacting system utilizing representation-based predictive architectures (JEPA) rather than discrete autoregressive generation. 
-
-Below is the comparative analysis and logic to unify this paradigm with the existing intelligence:
+The architecture transitions the system from standard generative overhead toward a representation-based predictive paradigm, optimizing for state-space efficiency.
 
 ### Comparative Analysis: Representation-Based Predictive Architectures vs. Generative Models
 

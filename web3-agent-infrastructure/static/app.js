@@ -34,7 +34,7 @@ ws.onopen = () => {
     statusIndicator.className = 'status-indicator stable';
     statusIndicator.textContent = 'CONNECTED';
     appendTerminal('Web3-Chase Clearing Bridge Simulation Pipe Linked Successfully.', 'success');
-    appendTerminal('Type <b>help</b> or try: <b>evolve</b>, <b>unlock-psi</b>, <b>calculate-vicreg</b>, <b>optimize-trajectory</b>, <b>metastasis-trigger</b>', 'info');
+    appendTerminal('Type <b>help</b> or try: <b>trigger-transfer</b>, <b>enable-secure-channel</b>, <b>calculate-vicreg</b>, <b>optimize-routing-trajectory</b>, <b>trigger-audit</b>', 'info');
 };
 
 ws.onclose = () => {
@@ -56,7 +56,7 @@ ws.onmessage = (event) => {
         regContainer.appendChild(card);
     }
 
-    if (data.metastasis_state === "active") {
+    if (data.audit_status === "active") {
          appendTerminal("Alert: Real-time Compliance sweep audit cycle running...", "error");
          // Inject compliance audit particles
          if (Math.random() < 0.4) {
@@ -214,7 +214,7 @@ function drawNetwork() {
         ctx.fill();
         ctx.stroke();
 
-        // Draw live Vertex AI Vision RF wave function visualization (expanding transparent rings)
+        // Draw live data stream activity wave rings
         const waveCount = 3;
         for (let i = 0; i < waveCount; i++) {
             const waveRadius = radius + ((Date.now() * 0.04 + i * 25) % 75);
@@ -276,7 +276,7 @@ function drawNetwork() {
         ctx.fillStyle = '#94a3b8';
         ctx.fillText(`CLIENT ID: ${telemetryData.client_id}`, 25, 69);
         ctx.fillStyle = '#10b981';
-        ctx.fillText(`SWEEP STATUS: ${telemetryData.metastasis_state.toUpperCase()}`, 25, 86);
+        ctx.fillText(`AUDIT STATUS: ${telemetryData.audit_status.toUpperCase()}`, 25, 86);
     }
     
     requestAnimationFrame(drawNetwork);
@@ -295,16 +295,17 @@ termIn.addEventListener('keydown', async (e) => {
         if (cmd.toLowerCase() === 'help') {
             appendTerminal(
                 'Available Commands:<br>' +
-                ' - <b>evolve</b>: Evolve state register and process a test sweep<br>' +
-                ' - <b>recalibrate</b>: Reset all registers and node state limits<br>' +
-                ' - <b>unlock-psi</b>: Verify cryptographic key validation<br>' +
-                ' - <b>calculate-vicreg</b>: Run PyTorch/NumPy VICReg Loss analysis<br>' +
-                ' - <b>optimize-trajectory</b>: Optimize ACH/RTP/Onyx clearing rails via SciPy<br>' +
-                ' - <b>process-settlement [gateway] [amount]</b>: Execute manual sweep<br>' +
-                ' - <b>metastasis-trigger</b>: Run real-time compliance sweep audit<br>' +
-                ' - <b>witness-resume</b>: Restore normal state and verify baseline hash<br>' +
-                ' - <b>process-dna</b>: Ingest and activate 20 quantum framework DNA cells<br>' +
-                ' - <b>bigquery-ml</b>: Run BigQuery ML protocol planetary Digital Twin move pre-calculation',
+                ' - <b>trigger-transfer</b>: Increment bridge volume metrics and run simulated transfer split<br>' +
+                ' - <b>reset-metrics</b>: Reset all registers and latency parameters<br>' +
+                ' - <b>enable-secure-channel</b>: Verify secure cryptographic channel signature<br>' +
+                ' - <b>calculate-vicreg</b>: Run representation decorrelation analysis via VICReg Loss<br>' +
+                ' - <b>optimize-routing-trajectory</b>: Optimize clearing volume allocations using SciPy<br>' +
+                ' - <b>process-settlement [gateway] [amount]</b>: Execute manual settlement routing<br>' +
+                ' - <b>trigger-audit</b>: Trigger real-time compliance sweep audit simulation<br>' +
+                ' - <b>resolve-audit</b>: Resolve active compliance audits and verify integrity hash<br>' +
+                ' - <b>process-modules</b>: Ingest and process high-performance Web3 framework modules<br>' +
+                ' - <b>run-analytics</b>: Run BigQuery SQL precalculations and telemetry analytics<br>' +
+                ' - <b>shutdown</b>: Turn offline the simulation dashboard services',
                 'info'
             );
             return;

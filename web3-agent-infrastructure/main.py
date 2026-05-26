@@ -5,10 +5,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
-from kernel.system import WillowKernel
+from kernel.system import ClearingBridgeKernel
 
-app = FastAPI(title="Willow Chip 2089 OS Simulator")
-kernel = WillowKernel()
+app = FastAPI(title="Web3-to-Fiat Clearing and Settlement Bridge Simulator")
+kernel = ClearingBridgeKernel()
 
 class JsonRpcRequest(BaseModel):
     jsonrpc: str = "2.0"

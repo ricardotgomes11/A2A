@@ -44,15 +44,15 @@ class ChaseWeb3SettlementEngine:
         
         return routing_manifest
 
-class WillowKernel:
+class ClearingBridgeKernel:
     def __init__(self, spec_path="spec/psi.json"):
         self.spec_path = spec_path
         self.registers = {
-            "ROOT_SOVEREIGN": 1.0,
-            "AGI_ANCHOR": 1.0,
-            "DOMAIN_FIXED": 1.0,
-            "PSI_GAIN": 0.89,
-            "ENTROPY": 0.00,
+            "BRIDGE_VOLUME_MUSD": 1.0,
+            "ROUTING_EFFICIENCY": 1.0,
+            "ACTIVE_CHANNELS": 1.0,
+            "TELEMETRY_GAIN": 0.89,
+            "SYSTEM_LATENCY": 0.00,
             "VICREG_LOSS": 0.00,
             "OPTIMIZED_DELAY": 0.00
         }
@@ -64,7 +64,7 @@ class WillowKernel:
             {"id": "BINANCE", "type": "liquidity_engine", "status": "stable", "load": 0.15},
             {"id": "JPMORGAN CHASE", "type": "treasury_center", "status": "stable", "load": 0.05}
         ]
-        self.metastasis_state = "dormant"
+        self.audit_status = "dormant"
         self.load_spec()
         self.dna_path = "spec/dna.json"
         self.load_dna()
@@ -74,13 +74,13 @@ class WillowKernel:
         self.operator = identity_chan.get("operator", "Ricardo Gomes")
         self.hardware_nodes = identity_chan.get("hardware_nodes", ["Samsung SM-F966U1", "iPhone 16+"])
         self.geospatial_anchor = identity_chan.get("geospatial_anchor", "New York City (Manhattan)")
-        self.project_core = identity_chan.get("project_core", "quantumai-463916")
+        self.project_core = identity_chan.get("project_core", "clearing-bridge-analytics-463916")
         self.client_id = identity_chan.get("identity_payload_token_id", "edf3b1f0-f1fc-4a2d-a6a4-513624bc8854")
         self.private_key_b64 = identity_chan.get("private_key_b64", "oisc2jtXvENDiSTbaoZ4pof3P16QHbcZel2080empJLd6rDzjFXFbgyrsezkk1hP+i0bQVSlY1SniZqN1XODYw==")
         
         self.settlement_engine = ChaseWeb3SettlementEngine(self.client_id)
         self.transaction_history = []
-
+        
     def load_spec(self):
         if os.path.exists(self.spec_path):
             with open(self.spec_path, "r") as f:
@@ -116,7 +116,7 @@ class WillowKernel:
                 node["latitude"] = lat
                 node["longitude"] = lon
                 
-                # Live Haversine formula calculation (pre-calculation and tautological pre-axiomatic deterministic hybrid execution)
+                # Live Haversine formula calculation
                 R = 6371.0  # Earth's radius in km
                 lat1, lon1 = np.radians(anchor)
                 lat2, lon2 = np.radians((lat, lon))
@@ -137,7 +137,7 @@ class WillowKernel:
         return {
             "registers": self.registers,
             "nodes": self.nodes,
-            "metastasis_state": self.metastasis_state,
+            "audit_status": self.audit_status,
             "operator": self.operator,
             "geospatial_anchor": self.geospatial_anchor,
             "client_id": self.client_id
@@ -149,54 +149,54 @@ class WillowKernel:
             return "Command empty."
         base_cmd = parts[0].lower()
 
-        # Dynamic self-healing: wake up system from terminated state if a new operational command is run
-        if self.metastasis_state == "terminated" and base_cmd not in ["recalibrate", "terminate"]:
-            self.metastasis_state = "dormant"
-            self.registers["PSI_GAIN"] = 0.89
+        # Dynamic self-healing: wake up system from suspended state if a new operational command is run
+        if self.audit_status == "suspended" and base_cmd not in ["reset-metrics", "shutdown"]:
+            self.audit_status = "dormant"
+            self.registers["TELEMETRY_GAIN"] = 0.89
             for node in self.nodes:
                 node["status"] = "stable"
                 node["load"] = 0.10
 
-        if base_cmd == "recalibrate":
-            self.registers["PSI_GAIN"] = 0.99
-            self.registers["ENTROPY"] = 0.00
+        if base_cmd == "reset-metrics":
+            self.registers["TELEMETRY_GAIN"] = 0.99
+            self.registers["SYSTEM_LATENCY"] = 0.00
             self.registers["VICREG_LOSS"] = 0.00
             self.registers["OPTIMIZED_DELAY"] = 0.00
             for node in self.nodes:
                 node["status"] = "stable"
                 node["load"] = 0.10
-            return "System alignment complete. PSI_GAIN optimized to 0.99. Compliance parameters reset."
+            return "System alignment complete. TELEMETRY_GAIN optimized to 0.99. Compliance parameters reset."
 
-        elif base_cmd == "evolve":
-            self.registers["ROOT_SOVEREIGN"] += 0.11
-            self.registers["AGI_ANCHOR"] += 0.05
+        elif base_cmd == "trigger-transfer":
+            self.registers["BRIDGE_VOLUME_MUSD"] += 0.11
+            self.registers["ROUTING_EFFICIENCY"] += 0.05
             # Run a simulated settlement loop
             gateway = np.random.choice(["COINBASE_PRIME", "BITPAY_PAYOUT", "ONYX_NETWORK"])
             amount = float(np.random.randint(5000, 250000))
             manifest = self.settlement_engine.process_on_ramp_settlement(gateway, amount, "123456789012")
             self.transaction_history.append(manifest)
             return (
-                f"Evolution shift initiated. Transaction sweep executed. "
+                f"Transfer execution sweep initiated. Transaction sweep executed. "
                 f"Gateway: {gateway}, Amount: ${amount:,.2f}, Protocol: {manifest.get('clearing_protocol')}, Status: {manifest.get('status')}."
             )
 
-        elif base_cmd == "unlock-psi":
+        elif base_cmd == "enable-secure-channel":
             # Cryptographic verification signature validation
             try:
                 decoded_key = base64.b64decode(self.private_key_b64)
                 if len(decoded_key) == 64:
-                    self.registers["PSI_GAIN"] = 1.618
+                    self.registers["TELEMETRY_GAIN"] = 1.618
                     return (
-                        f"WARNING: Core limits overridden. Golden ratio amplification achieved. "
+                        f"WARNING: Core limits overridden. Security multiplier amplification achieved. "
                         f"Identity Verified: {self.operator} @ {self.geospatial_anchor}. Project Core: {self.project_core}."
                     )
             except Exception:
                 pass
             return "CRITICAL ERROR: Recovery integrity check signature mismatch."
 
-        elif base_cmd == "metastasis-trigger":
-            self.metastasis_state = "active"
-            self.registers["ENTROPY"] = 0.77
+        elif base_cmd == "trigger-audit":
+            self.audit_status = "active"
+            self.registers["SYSTEM_LATENCY"] = 0.77
             # Inject a simulated compliance audit anomaly
             for node in self.nodes:
                 if node["id"] == "METAMASK":
@@ -204,7 +204,7 @@ class WillowKernel:
                     node["load"] = 0.95
             return "CRITICAL: Automated compliance sweep mismatch. Initiating self-healing verification..."
 
-        elif base_cmd == "witness-resume":
+        elif base_cmd == "resolve-audit":
             return self.verify_and_heal()
 
         elif base_cmd == "calculate-vicreg":
@@ -227,7 +227,7 @@ class WillowKernel:
 
         elif base_cmd == "fund":
             target = " ".join(parts[1:]).lower() if len(parts) > 1 else "wallets"
-            self.registers["ROOT_SOVEREIGN"] += 5.0
+            self.registers["BRIDGE_VOLUME_MUSD"] += 5.0
             for node in self.nodes:
                 if node["id"] in ["METAMASK", "COINBASE", "BINANCE"]:
                     node["load"] = min(0.99, node["load"] + 0.15)
@@ -238,9 +238,9 @@ class WillowKernel:
                 f"Tx Signature Hash: {hashlib.sha256(str(time.time()).encode()).hexdigest()[:16]} verified."
             )
 
-        elif base_cmd == "process-dna" or base_cmd == "dna":
+        elif base_cmd == "process-modules" or base_cmd == "modules":
             if not self.dna_data:
-                return "Error: DNA cell trunk data not ingested."
+                return "Error: Module framework data not ingested."
             
             results = []
             for item in self.dna_data[:5]:
@@ -249,45 +249,45 @@ class WillowKernel:
                 dev = item["developer"]
                 lang = item["language"]
                 
-                # Compute a live deterministic "quantum cell activation resonance" based on entropy and rank
-                resonance = (21 - rank) * (1.618 - self.registers["ENTROPY"])
-                results.append(f"Cell Trunk [{framework}] by {dev} -> Resonance: {resonance:.3f}")
+                # Compute a live deterministic efficiency metric based on latency and rank
+                resonance = (21 - rank) * (1.618 - self.registers["SYSTEM_LATENCY"])
+                results.append(f"Module Trunk [{framework}] by {dev} -> Efficiency: {resonance:.3f}")
                 
             # Log to transaction history or registers
-            self.registers["AGI_ANCHOR"] = round(float(np.mean([(21 - x["rank"]) * 0.1 for x in self.dna_data])), 2)
+            self.registers["ROUTING_EFFICIENCY"] = round(float(np.mean([(21 - x["rank"]) * 0.1 for x in self.dna_data])), 2)
             
             return (
-                f"[DNA CELL TRUNK PROCESSING COMPLETED]\n"
-                f"Ingested {len(self.dna_data)} Quantum Framework vectors into local deterministic pipeline.\n"
-                f"Top Active Cell Alignments:\n" + "\n".join(results)
+                f"[MODULE PROCESSING COMPLETED]\n"
+                f"Ingested {len(self.dna_data)} Framework vectors into local deterministic pipeline.\n"
+                f"Top Active Alignments:\n" + "\n".join(results)
             )
 
-        elif base_cmd == "bigquery-ml" or base_cmd == "precalculate-move":
+        elif base_cmd == "run-analytics" or base_cmd == "precalculate-move":
             backbone = self.spec_data.get("google_backbone", {})
             bq = backbone.get("bigquery", {})
             ee = backbone.get("earth_engine", {})
-            vvision = backbone.get("vertex_ai_vision", {})
+            vanalytics = backbone.get("vertex_ai_analytics", {})
             
             if not bq:
                 return "Error: Google Backbone configuration not loaded in spec/psi.json."
                 
-            prev_sovereign = self.registers["ROOT_SOVEREIGN"]
-            prev_anchor = self.registers["AGI_ANCHOR"]
-            next_state = prev_sovereign + prev_anchor
+            prev_bridge_volume = self.registers["BRIDGE_VOLUME_MUSD"]
+            prev_routing_efficiency = self.registers["ROUTING_EFFICIENCY"]
+            next_state = prev_bridge_volume + prev_routing_efficiency
             
-            self.registers["ROOT_SOVEREIGN"] = round(next_state, 4)
-            self.registers["DOMAIN_FIXED"] = round(self.registers["DOMAIN_FIXED"] * 1.618, 4)
-            self.registers["ENTROPY"] = 0.00
+            self.registers["BRIDGE_VOLUME_MUSD"] = round(next_state, 4)
+            self.registers["ACTIVE_CHANNELS"] = round(self.registers["ACTIVE_CHANNELS"] * 1.618, 4)
+            self.registers["SYSTEM_LATENCY"] = 0.00
             
             report = (
-                f"🪐 INITIATING BIGQUERY ML PLANETARY DIGITAL TWIN PROTOCOL\n"
+                f"📊 INITIATING BIGQUERY ML TRANSACTION ANALYTICS PROTOCOL\n"
                 f"----------------------------------------------------------------------\n"
                 f"[BIGQUERY] Accessing Dataset: {bq.get('project_id')}.{bq.get('dataset_id')} ({bq.get('data_scale_pb')} PB raw storage)\n"
                 f"[EARTH ENGINE] Historical Raster Sources Infused: {', '.join(ee.get('historical_raster_sources', []))}\n"
-                f"[VERTEX VISION] Live Computer Vision stream linked: {', '.join(vvision.get('motion_streams', []))}\n"
-                f"[PRECALCULATION] Executing SQL AI Model (F_n = F_n-1 + F_n-2):\n"
-                f"  F_n-2 (AGI_ANCHOR): {prev_anchor:.4f}\n"
-                f"  F_n-1 (ROOT_SOVEREIGN): {prev_sovereign:.4f}\n"
+                f"[VERTEX ANALYTICS] Live telemetry data streams linked: {', '.join(vanalytics.get('data_streams', []))}\n"
+                f"[PRECALCULATION] Executing SQL Model (F_n = F_n-1 + F_n-2):\n"
+                f"  F_n-2 (ROUTING_EFFICIENCY): {prev_routing_efficiency:.4f}\n"
+                f"  F_n-1 (BRIDGE_VOLUME_MUSD): {prev_bridge_volume:.4f}\n"
                 f"  F_n   (NEW STATE): {next_state:.4f} (Deterministic Proven Fact)\n"
                 f"----------------------------------------------------------------------\n"
                 f"🔮 PRECALCULATED NEXT OPTIMAL CAPITAL MOVE:\n"
@@ -297,13 +297,13 @@ class WillowKernel:
             )
             return report
 
-        elif base_cmd == "terminate":
-            self.metastasis_state = "terminated"
+        elif base_cmd == "shutdown":
+            self.audit_status = "suspended"
             for node in self.nodes:
                 node["status"] = "offline"
                 node["load"] = 0.00
             self.registers = {k: 0.00 for k in self.registers}
-            return "[TERMINATION SIGNAL ACCEPTED] AI Helper and AI Assistant subprocesses offline. Systems deactivated."
+            return "[SHUTDOWN SIGNAL ACCEPTED] Analytics Helper and clearing subprocesses offline. Systems deactivated."
 
         else:
             return f"Command unknown: '{cmd}'. Input rejected by clearing bridge core."
@@ -399,8 +399,8 @@ class WillowKernel:
         
         # We also support baseline fallback hash check
         if expected_hash == "0x7f3a8b2c1d9e" or actual_hash == expected_hash:
-            self.metastasis_state = "dormant"
-            self.registers["ENTROPY"] = 0.00
+            self.audit_status = "dormant"
+            self.registers["SYSTEM_LATENCY"] = 0.00
             for node in self.nodes:
                 node["status"] = "stable"
             return "Self-healing completed. Compliance sweep validation matched baseline spec. System normal."
